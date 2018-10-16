@@ -71,4 +71,4 @@ if __name__ == "__main__":
         print('Please run "{} -m pip install --user -r {}" for resolving the issue.'.format(sys.executable, args.requirements))
         sys.exit(1)
 
-    print('Python requirements from {} are satisfied.'.format(args.requirements))
+    # print('Python requirements from {} are satisfied.'.format(args.requirements))

@@ -21,7 +21,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Contains elements taken from miniterm "Very simple serial terminal" which
+# Contains elements taken from miniterm "Very termsimple serial terminal" which
 # is part of pySerial. https://github.com/pyserial/pyserial
 # (C)2002-2015 Chris Liechti <cliechti@gmx.net>
 #
@@ -61,6 +61,7 @@ CTRL_B = '\x02'
 CTRL_F = '\x06'
 CTRL_H = '\x08'
 CTRL_R = '\x12'
+CTRL_X = '\x18'
 CTRL_T = '\x14'
 CTRL_Y = '\x19'
 CTRL_P = '\x10'
@@ -212,7 +213,7 @@ class SerialReader(StoppableThread):
     def run(self):
         if not self.serial.is_open:
             self.serial.baudrate = self.baud
-            self.serial.rts = True  # Force an RTS reset on open
+            # self.serial.rts = True  # Force an RTS reset on open
             self.serial.open()
             self.serial.rts = False
         try:
@@ -465,6 +466,8 @@ class Monitor(object):
             self.run_make("flash")
         elif c == CTRL_A:  # Recompile & upload app only
             self.run_make("app-flash")
+        elif c == CTRL_X:  # Update spiffs partition
+            self.run_make("spiffsfs-flash")
         elif c == CTRL_Y:  # Toggle output display
             self.output_toggle()
         elif c == CTRL_P:
@@ -493,6 +496,7 @@ class Monitor(object):
 ---    {reset:7} Reset target board via RTS line
 ---    {makecmd:7} Build & flash project
 ---    {appmake:7} Build & flash app only
+---    {spiffs:7} Run 'make spiffsfs-flash' to flash the spiffs partition
 ---    {output:7} Toggle output display
 ---    {pause:7} Reset target into bootloader to pause app via RTS line
 """.format(version=__version__,
@@ -501,6 +505,7 @@ class Monitor(object):
            reset=key_description(CTRL_R),
            makecmd=key_description(CTRL_F),
            appmake=key_description(CTRL_A),
+           spiffs=key_description(CTRL_X),
            output=key_description(CTRL_Y),
            pause=key_description(CTRL_P) )
 
