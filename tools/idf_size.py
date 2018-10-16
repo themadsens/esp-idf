@@ -224,18 +224,20 @@ def print_detailed_sizes(sections, key, header):
                 "IRAM",
                 "Flash code",
                 "& rodata",
-                "Total")
-    print("%24s %10s %6s %6s %10s %8s %7s" % headings)
+                "Total",
+                "Total-bss")
+    print("%24s %10s %6s %6s %10s %8s %7s %s" % headings)
     result = {}
     for k in sizes:
         v = sizes[k]
         result[k] = {}
         result[k]["data"] = v.get(".dram0.data", 0)
-        result[k]["bss"] = v.get(".dram0.bss", 0)
         result[k]["iram"] = sum(t for (s,t) in v.items() if s.startswith(".iram0"))
         result[k]["flash_text"] = v.get(".flash.text", 0)
         result[k]["flash_rodata"] = v.get(".flash.rodata", 0)
         result[k]["total"] = sum(result[k].values())
+        result[k]["bss"] = v.get(".dram0.bss", 0)
+        result[k]["total_bss"] = result[k]["total"] + result[k]["bss"]
 
     def return_total_size(elem):
         val = elem[1]
@@ -247,12 +249,13 @@ def print_detailed_sizes(sections, key, header):
     for k,v in sorted(s, key=return_total_size, reverse=True):
         if ":" in k:  # print subheadings for key of format archive:file
             sh,k = k.split(":")
-        print("%24s %10d %6d %6d %10d %8d %7d" % (k[:24],
+        print("%24s %10d %6d %6d %10d %8d %7d %9d" % (k[:24],
                                                   v["data"],
                                                   v["bss"],
                                                   v["iram"],
                                                   v["flash_text"],
                                                   v["flash_rodata"],
+                                                  v["total_bss"],
                                                   v["total"]))
 
 def print_archive_symbols(sections, archive):
