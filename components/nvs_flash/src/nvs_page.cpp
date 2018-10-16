@@ -923,29 +923,38 @@ void Page::debugDump() const
 {
     printf("state=%x (%s) addr=%x seq=%d\nfirstUsed=%d nextFree=%d used=%d erased=%d\n", (uint32_t) mState, pageStateToName(mState), mBaseAddress, mSeqNumber, static_cast<int>(mFirstUsedEntry), static_cast<int>(mNextFreeEntry), mUsedEntryCount, mErasedEntryCount);
     size_t skip = 0;
+    int hasnl = 1;
     for (size_t i = 0; i < ENTRY_COUNT; ++i) {
-        printf("%3d: ", static_cast<int>(i));
         EntryState state = mEntryTable.get(i);
+        if (hasnl || (state == EntryState::WRITTEN && !skip)) {
+            printf("%s%3d: ", hasnl ? "" : "\n", static_cast<int>(i));
+            hasnl = state == EntryState::WRITTEN && !skip;
+        }
         if (state == EntryState::EMPTY) {
-            printf("E\n");
+            printf("E");
         } else if (state == EntryState::ERASED) {
-            printf("X\n");
+            printf("X");
         } else if (state == EntryState::WRITTEN) {
             Item item;
             readEntry(i, item);
             if (skip == 0) {
-                printf("W ns=%2u type=%2u span=%3u key=\"%s\" chunkIdx=%d len=%d\n", item.nsIndex, static_cast<unsigned>(item.datatype), item.span, item.key, item.chunkIndex, (item.span != 1)?((int)item.varLength.dataSize):-1);
+                printf("W ns=%2u type=%2u span=%3u key=\"%s\" chunkIdx=%d len=%d\n",
+                       item.nsIndex, static_cast<unsigned>(item.datatype), item.span, item.key, item.chunkIndex,
+                       (item.span != 1)?((int)item.varLength.dataSize):-1);
+                hasnl = 1;
                 if (item.span > 0 && item.span <= ENTRY_COUNT - i) {
                     skip = item.span - 1;
                 } else {
                     skip = 0;
                 }
             } else {
-                printf("D\n");
+                printf("D");
                 skip--;
             }
         }
     }
+    if (!hasnl)
+        printf("\n");
 }
 
 esp_err_t Page::calcEntries(nvs_stats_t &nvsStats)
