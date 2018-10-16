@@ -30,7 +30,7 @@
 #include "stack/bt_types.h"
 
 static const char *CONFIG_FILE_PATH = "bt_config.conf";
-static const period_ms_t CONFIG_SETTLE_PERIOD_MS = 3000;
+//static const period_ms_t CONFIG_SETTLE_PERIOD_MS = 3000;
 
 static void btc_key_value_to_string(uint8_t *key_value, char *value_str, int key_length);
 static osi_mutex_t lock;  // protects operations on |config|.

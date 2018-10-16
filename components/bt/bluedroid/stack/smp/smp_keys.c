@@ -58,6 +58,7 @@ static void smp_process_private_key(tSMP_CB *p_cb);
 static void smp_finish_nonce_generation(tSMP_CB *p_cb);
 static void smp_process_new_nonce(tSMP_CB *p_cb);
 
+#if 0
 static const tSMP_ACT smp_encrypt_action[] = {
     smp_generate_compare,           /* SMP_GEN_COMPARE */
     smp_generate_confirm,          /* SMP_GEN_CONFIRM*/
@@ -70,6 +71,7 @@ static const tSMP_ACT smp_encrypt_action[] = {
     smp_generate_srand_mrand_confirm, /* SMP_GEN_SRAND_MRAND */
     smp_generate_rand_cont         /* SMP_GEN_SRAND_MRAND_CONT */
 };
+#endif
 
 void smp_debug_print_nbyte_little_endian(UINT8 *p, const UINT8 *key_name, UINT8 len)
 {
