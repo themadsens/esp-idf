@@ -13,7 +13,8 @@
 .PHONY: build-components menuconfig defconfig all build clean all_binaries check-submodules size size-components size-files size-symbols list-components
 
 MAKECMDGOALS ?= all
-all: all_binaries | check_python_dependencies
+all: all_binaries
+#all: all_binaries | check_python_dependencies
 # see below for recipe of 'all' target
 #
 # # other components will add dependencies to 'all_binaries'. The
@@ -476,7 +477,7 @@ endif
 # Notify users when some of the required python packages are not installed
 check_python_dependencies:
 ifndef IS_BOOTLOADER_BUILD
-	$(PYTHON) $(IDF_PATH)/tools/check_python_dependencies.py
+	: $(PYTHON) $(IDF_PATH)/tools/check_python_dependencies.py
 endif
 
 all_binaries: $(APP_BIN)
