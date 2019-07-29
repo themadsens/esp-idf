@@ -257,7 +257,7 @@ void esp_log_write(esp_log_level_t level, const char* tag, const char* format, .
 #define ESP_EARLY_LOGV( tag, format, ... ) ESP_LOG_EARLY_IMPL(tag, format, ESP_LOG_VERBOSE, V, ##__VA_ARGS__)
 
 #define ESP_LOG_EARLY_IMPL(tag, format, log_level, log_tag_letter, ...) do {                         \
-        if (LOG_LOCAL_LEVEL >= log_level) {                                                          \
+        if (CONFIG_LOG_BOOTLOADER_LEVEL >= log_level) {                                                          \
             ets_printf(LOG_FORMAT(log_tag_letter, format), esp_log_timestamp(), tag, ##__VA_ARGS__); \
         }} while(0)
 
