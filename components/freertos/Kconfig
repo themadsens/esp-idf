@@ -256,7 +256,7 @@ config TIMER_TASK_STACK_DEPTH
 
 config TIMER_QUEUE_LENGTH
     int "FreeRTOS timer queue length"
-    range 5 20
+    range 5 50
     default 10
     help
         FreeRTOS provides a set of timer related API functions. Many of these functions use a standard
